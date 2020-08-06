@@ -1,74 +1,61 @@
-import React,{Component} from "react"
+import React,{useState,useEffect} from "react"
 import {fetchDailyData} from '../../API';
 import styles from './Chart.module.css';
 import {Line, Bar} from 'react-chartjs-2';
-class Chart extends Component{
- state = {
-  dailyData:[]
- }
- async componentDidMount(){
-  const data = await fetchDailyData();
-  this.setState({
-   dailyData : data
-  });
-  console.log(this.state);
- }
- render(){
-  console.log(this.state.dailyData.length);
-  const lineChart = (
-     this.state.dailyData.length ?
-        <div>
-         hello
+const  Chart = (props /*{data:{confirmed,recovered,deaths}, country}*/) => {
+   const {data:{confirmed,deaths,recovered},country}= props;
+   const [dailyGlobalData,setGlobalDailyDta] = useState([]);
+   
+ useEffect(()=>{
+   const setFetchedData = async ()=> setGlobalDailyDta(await fetchDailyData());
+   setFetchedData()
+ },[]);
+  
+const lineChart = (
+     dailyGlobalData.length>0 ?
         <Line
         data ={{
-         labels: this.state.dailyData.map(({date})=> date ),
+         labels: dailyGlobalData.map(({date})=> date ),
          datasets : [{
-             data : this.state.dailyData.map(({confirmed})=>confirmed),
+            data : dailyGlobalData.map(({confirmed})=>confirmed),
              label :'infected',
              borderColor : '#3333ff',
              fill: true
             }, {
-            data : this.state.dailyData.map(({deaths})=>deaths),
-            label :'infected',
+            data : dailyGlobalData.map(({deaths})=>deaths),
+            label :'deaths',
             borderColor : 'red',
             backgroundColor : 'rgba(255,0,0,0.5)',
             fill: true
             }]
            }}
         />
-        </div>
         : null
        );
-  return (
-   <div className={styles.container}>
-     {lineChart} 
-   </div>
-  );
- }
+
+const barChar = (
+      country?
+      (
+         <Bar
+         data = {{  
+            labels : ['Infected','Recovered','Deaths'],
+            datasets:[{
+               label : 'people',
+               backgroundColor : ['rgb(0,0,255, 0.5)','rgb(0,255,0, 0.5)','rgba(255, 0, 0, 0.5)'],
+               data : [confirmed.value,recovered.value,deaths.value],
+            }]
+         }}
+         options={{
+            legend:{display:false},
+            title:{display:true,text :'current state in '+country},
+         }}
+         />
+      )
+      :null
+   );
+
+return (<div className={styles.container}>
+            {country? barChar:lineChart}
+      </div>);
 }
-// const Chart = () => {
-//   const [dailyData,setDailyData] = useState({});
-//   useEffect(()=>{
-//    const fetchApi = async ( )=> { 
-//       setDailyData(await fetchDailyData());
-//     }
-//   fetchApi();
-//  });
-//  const lineChart = (
-//   !dailyData ?
-//   <line
-//   data ={{
-//    labels: "",
-//    datasets : [{},{}]
-//   }}
-//   />
-//   : null
-//  );
-//   return (
-//    <div>
-//     <h1>Chart</h1>
-//    </div>
-//   );
- 
-// }
 export default Chart;
