@@ -3,6 +3,8 @@ import {Cards,Chart,CountryPicker} from "./components";
 import styles from "./App.module.css"
 import {fetchData} from "./API";
 import coronaImage from './images/image.png';
+import {Typography} from '@material-ui/core';
+import CopyrightIcon from '@material-ui/icons/Copyright';
 class App extends Component{
   
 state={
@@ -10,7 +12,8 @@ state={
       country:''
     }
 countryPickerHandler = async (country) =>{
-        const fetchedData = await fetchData(country);
+        
+        const  fetchedData = await fetchData(country);
         this.setState({data:fetchedData, country:country});
     } 
  async componentDidMount(){
@@ -31,6 +34,11 @@ render(){
       <Cards data={this.state.data}/>
       <CountryPicker  handleCountryChange={this.countryPickerHandler}/>
       <Chart data={this.state.data} country={this.state.country}/>
+      <span className={styles.span}>
+        <CopyrightIcon/>
+        <Typography color="textSecondary" > Created by Zwd20 All right reserved</Typography>
+      </span>
+
    </div>
   );
  }

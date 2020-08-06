@@ -2,7 +2,7 @@ import React,{useState,useEffect} from "react"
 import {fetchDailyData} from '../../API';
 import styles from './Chart.module.css';
 import {Line, Bar} from 'react-chartjs-2';
-const  Chart = (props /*{data:{confirmed,recovered,deaths}, country}*/) => {
+const  Chart = (props) => {
    const {data:{confirmed,deaths,recovered},country}= props;
    const [dailyGlobalData,setGlobalDailyDta] = useState([]);
    

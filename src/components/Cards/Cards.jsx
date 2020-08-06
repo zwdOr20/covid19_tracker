@@ -55,7 +55,7 @@ if(!confirmed)
             />
            </Typography>
            <Typography color="textSecondary" >{new Date(lastUpdate).toDateString()}</Typography>
-           <Typography variant="body"> Number of death caused by Covid-19</Typography>
+           <Typography variant="body"> Number of deaths caused by Covid-19</Typography>
         </CardContent>
       </Grid>
     </Grid>
